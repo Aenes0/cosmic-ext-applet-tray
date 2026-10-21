@@ -1,0 +1,39 @@
+[package]
+name = "cosmic-ext-applet-tray"
+version = "0.1.0"
+edition = "2024"
+license = "GPL-3.0-only"
+description = "Windows 11 style tray for COSMIC: choose by dragging which background apps show on the panel"
+
+[dependencies]
+futures = "0.3"
+libcosmic = { git = "https://github.com/pop-os/libcosmic", default-features = false, features = [
+    "applet",
+    "applet-token",
+    "dbus-config",
+    "desktop-systemd-scope",
+    "multi-window",
+    "tokio",
+    "wayland",
+    "winit",
+] }
+rustc-hash = "2.1"
+serde = { version = "1.0.228", features = ["derive"] }
+tokio = { version = "1.49.0", features = ["full"] }
+tracing = "0.1"
+tracing-log = "0.2.0"
+tracing-subscriber = { version = "0.3.22", features = ["env-filter"] }
+zbus = { version = "5.14.0", default-features = false, features = ["tokio"] }
+
+[profile.release]
+opt-level = 3
+panic = "abort"
+lto = "thin"
+
+# Same pins as cosmic-applets epoch-1.10.0, to match the installed panel.
+[patch."https://github.com/smithay/client-toolkit.git"]
+sctk = { package = "smithay-client-toolkit", version = "0.20.0" }
+
+[patch."https://github.com/pop-os/cosmic-protocols"]
+cosmic-protocols = { git = "https://github.com/pop-os/cosmic-protocols//", rev = "c0cff4d" }
+cosmic-client-toolkit = { git = "https://github.com/pop-os/cosmic-protocols//", rev = "c0cff4d" }

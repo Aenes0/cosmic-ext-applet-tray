@@ -25,7 +25,11 @@ cosmic-applet-status-area`, GPL-3.0). Ele já faz:
   (`overflow_index`, `view_overflow_popup`, `Msg::ToggleOverflow` em `src/components/app.rs`).
 
 O serviço que coleta os ícones (`com.system76.CosmicStatusNotifierWatcher`, unidade systemd de
-usuário do próprio pacote) **continua sendo o do sistema**: o fork não o substitui nem o inicia.
+usuário do próprio pacote) **continua sendo o do sistema**: o fork não o substitui e não traz o
+modo servidor (`--status-notifier-watcher`). Mas o fork **mantém o lado cliente do upstream**: o
+`register_applet` (`cosmic_register`: uma vez ao conectar e de novo quando o serviço troca de dono),
+que também ativa o serviço pelo D-Bus se ele não estiver rodando. Sem isso o serviço, que a cada
+60 s descarta os applets que sumiram, se encerra sozinho quando não sobra nenhum, e a bandeja para.
 
 O padrão de projeto segue o da barra de tarefas (`~/Projetos/taskbar`, fork do `cosmic-app-list`):
 crate próprio, mesmas fixações de versão do `cosmic-applets epoch-1.10.0` no `Cargo.toml`
